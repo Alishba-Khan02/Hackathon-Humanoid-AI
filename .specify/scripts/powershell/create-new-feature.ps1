@@ -5,6 +5,7 @@ param(
     [switch]$Json,
     [string]$ShortName,
     [int]$Number = 0,
+    [string]$FeatureFile, # Added FeatureFile parameter
     [switch]$Help,
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$FeatureDescription
@@ -13,12 +14,13 @@ $ErrorActionPreference = 'Stop'
 
 # Show help if requested
 if ($Help) {
-    Write-Host "Usage: ./create-new-feature.ps1 [-Json] [-ShortName <name>] [-Number N] <feature description>"
+    Write-Host "Usage: ./create-new-feature.ps1 [-Json] [-ShortName <name>] [-Number N] [-FeatureFile <path>] <feature description>"
     Write-Host ""
     Write-Host "Options:"
     Write-Host "  -Json               Output in JSON format"
     Write-Host "  -ShortName <name>   Provide a custom short name (2-4 words) for the branch"
     Write-Host "  -Number N           Specify branch number manually (overrides auto-detection)"
+    Write-Host "  -FeatureFile <path> Read feature description from a file" # Added help for FeatureFile
     Write-Host "  -Help               Show this help message"
     Write-Host ""
     Write-Host "Examples:"
@@ -27,13 +29,19 @@ if ($Help) {
     exit 0
 }
 
-# Check if feature description provided
-if (-not $FeatureDescription -or $FeatureDescription.Count -eq 0) {
-    Write-Error "Usage: ./create-new-feature.ps1 [-Json] [-ShortName <name>] <feature description>"
+# Handle feature description input
+if ($FeatureFile) {
+    if (-not (Test-Path $FeatureFile)) {
+        Write-Error "Error: Feature file '$FeatureFile' not found."
+        exit 1
+    }
+    $featureDesc = Get-Content $FeatureFile -Raw
+} elseif (-not $FeatureDescription -or $FeatureDescription.Count -eq 0) {
+    Write-Error "Usage: ./create-new-feature.ps1 [-Json] [-ShortName <name>] [-Number N] [-FeatureFile <path>] <feature description>"
     exit 1
+} else {
+    $featureDesc = ($FeatureDescription -join ' ').Trim()
 }
-
-$featureDesc = ($FeatureDescription -join ' ').Trim()
 
 # Resolve repository root. Prefer git information when available, but fall back
 # to searching for repository markers so the workflow still functions in repositories that
@@ -272,7 +280,7 @@ if (Test-Path $template) {
 # Auto-create history/prompts/<branch-name>/ directory (same as specs/<branch-name>/)
 # This keeps naming consistent across branch, specs, and prompts directories
 $promptsDir = Join-Path $repoRoot 'history' 'prompts' $branchName
-New-Item -ItemType Directory -Path $promptsDir -Force | Out-Null
+New-Item -ItemType Directory -Path "$promptsDir" -Force | Out-Null
 
 # Set the SPECIFY_FEATURE environment variable for the current session
 $env:SPECIFY_FEATURE = $branchName

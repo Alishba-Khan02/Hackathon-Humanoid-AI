@@ -1,0 +1,32 @@
+# ROS 2 Navigation Stack Configuration Parameters for Simulated Humanoid
+
+# This is a placeholder file for ROS 2 Navigation Stack configuration.
+# Actual parameters will vary based on the specific robot model and environment.
+
+# Global parameters
+ros__parameters:
+  planner_server:
+    ros__parameters:
+      use_sim_time: true
+      planner_plugins: ["GridBased"]
+      GridBased:
+        plugin: "nav2_navfn_planner/NavfnPlanner"
+        allow_unknown: true
+  controller_server:
+    ros__parameters:
+      use_sim_time: true
+      controller_plugins: ["FollowPath"]
+      FollowPath:
+        plugin: "nav2_regulated_pure_pursuit_controller/RegulatedPurePursuitController"
+        desired_linear_vel: 0.5
+        min_homing_dist: 0.5
+  bt_navigator:
+    ros__parameters:
+      use_sim_time: true
+      default_bt_xml_filename: "tree.xml"
+      plugin_lib_names:
+        - nav2_compute_path_to_pose_action_bt_node
+        - nav2_follow_path_action_bt_node
+        - nav2_undock_action_bt_node
+        - nav2_clear_costmap_service_bt_node
+  # ... more parameters for other components like costmap filters, etc.

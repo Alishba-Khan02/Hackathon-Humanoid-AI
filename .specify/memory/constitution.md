@@ -1,55 +1,97 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+Version change: 0.1.0 -> 0.2.0
+List of modified principles:
+  - PRINCIPLE_1_NAME: "Accuracy & Source Verification"
+  - PRINCIPLE_2_NAME: "Clarity for Technical Readers"
+  - PRINCIPLE_3_NAME: "Reproducibility & Transparency"
+  - PRINCIPLE_4_NAME: "Rigor & Academic Discipline"
+Added sections:
+  - 4. Key Standards
+Removed sections:
+  - 2.5. [PRINCIPLE_5_NAME] (empty placeholder removed)
+Templates requiring updates:
+  - .specify/templates/plan-template.md: ⚠ pending
+  - .specify/templates/spec-template.md: ⚠ pending
+  - .specify/templates/tasks-template.md: ⚠ pending
+  - .specify/commands/sp.adr.toml: ✅ updated
+  - .specify/commands/sp.analyze.toml: ✅ updated
+  - .specify/commands/sp.checklist.toml: ✅ updated
+  - .specify/commands/sp.clarify.toml: ✅ updated
+  - .specify/commands/sp.constitution.toml: ✅ updated
+  - .specify/commands/sp.git.commit_pr.toml: ✅ updated
+  - .specify/commands/sp.implement.toml: ✅ updated
+  - .specify/commands/sp.phr.toml: ✅ updated
+  - .specify/commands/sp.plan.toml: ✅ updated
+  - .specify/commands/sp.specify.toml: ✅ updated
+  - .specify/commands/sp.tasks.toml: ✅ updated
+Follow-up TODOs:
+  - TODO(RATIFICATION_DATE): Needs to be set at initial adoption.
+-->
+# Project Constitution: AI/Spec-Driven Book Creation
 
-## Core Principles
+## 1. Introduction
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+This document outlines the core principles and standards governing the AI/Spec-Driven Book Creation project. It serves as a foundational guide for all contributors, ensuring consistency, quality, and alignment with project goals.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+- **Ratification Date:** TODO(RATIFICATION_DATE): Needs to be set at initial adoption.
+- **Last Amended:** 2025-12-06
+- **Constitution Version:** 0.2.0
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+## 2. Core Principles
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### 2.1. Accuracy & Source Verification
+All content must be factually correct and verified using reputable, traceable sources.
+No claim may be included without validation.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### 2.2. Clarity for Technical Readers
+Target audience: intermediate–advanced computer science and software engineering readers.
+Writing must explain concepts clearly without oversimplifying.
 
-### [PRINCIPLE_6_NAME]
+### 2.3. Reproducibility & Transparency
+Every process, explanation, claim, and code example must be reproducible by the reader.
+All steps must be documented and traceable.
 
+### 2.4. Rigor & Academic Discipline
+Prefer peer-reviewed research, credible technical reports, and high-quality primary sources.
+Avoid speculation unless clearly labeled as such.
 
-[PRINCIPLE__DESCRIPTION]
+## 3. Governance
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### 3.1. Amendment Procedure
+This constitution can be amended by consensus among core contributors or via a formal proposal and voting process as defined in the project's `GOVERNANCE.md` (if applicable). All amendments must increment the `CONSTITUTION_VERSION` according to semantic versioning rules:
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- **MAJOR:** Backward incompatible governance/principle removals or redefinitions.
+- **MINOR:** New principle/section added or materially expanded guidance.
+- **PATCH:** Clarifications, wording, typo fixes, non-semantic refinements.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### 3.2. Compliance Review
+Adherence to these principles and standards is regularly reviewed during code reviews, architectural discussions, and project audits.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## 4. Key Standards
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+### 4.1. Citations & Sources
+Minimum 15 total sources.
+At least 50% must be peer-reviewed.
+Citation style: APA (7th edition).
+All factual claims must link directly to a cited source.
+No unverifiable claims may be included.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### 4.2. Writing Standards
+Readability target: Flesch-Kincaid Grade 10–12.
+Writing must be cohesive, structured, and academically neutral.
+Zero tolerance for plagiarism.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### 4.3. Format & Deliverables
+Final output: Docusaurus book, deployed to GitHub Pages.
+Also export as PDF with embedded citations.
+All chapters must be compatible with Spec-Kit Plus execution flows.
+
+### 4.4. Length Requirement
+Total word count: 5,000–7,000 words.
+Each chapter must maintain consistent tone and style.
+
+## 5. Definitions
+
+- **Core Contributors:** Individuals with write access to the main repository and significant decision-making authority.
+- **Project Goals:** The overarching objectives and vision for AI/Spec-Driven Book Creation.
