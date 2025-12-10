@@ -1,3 +1,7 @@
+
+
+
+
 # Physical AI & Humanoid Robotics Course Documentation
 
 This repository hosts the documentation for the "Physical AI & Humanoid Robotics Course," a comprehensive resource for students, educators, and researchers exploring the intersection of AI and robotics. The course focuses on applying AI knowledge to control humanoid robots in simulated and real-world environments, bridging digital intelligence (LLMs, simulation) with physical embodiment (robots, sensors).
