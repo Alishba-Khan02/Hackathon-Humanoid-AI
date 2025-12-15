@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.tsx
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 // Define the shape of the user object
 interface User {
@@ -22,25 +22,26 @@ interface AuthContextType {
   signout: () => void;
 }
 
-// Create the context with a default value of undefined
+// Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Create the AuthProvider component
+// Update this to your deployed Hugging Face backend URL
+const BACKEND_URL = 'https://ak889-auth-backend.hf.space';
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
-    // Initialize user state from localStorage on component mount
     try {
       const storedUser = localStorage.getItem('authUser');
       return storedUser ? JSON.parse(storedUser) : null;
     } catch (error) {
-      console.error("Failed to parse user from localStorage", error);
+      console.error('Failed to parse user from localStorage', error);
       return null;
     }
   });
 
-  const signin = async (email, password) => {
+  const signin = async (email: string, password: string): Promise<boolean> => {
     try {
-      const response = await fetch('https://ak889-auth-backend.hf.space/signin', {
+      const response = await fetch(`${BACKEND_URL}/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -48,7 +49,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
-        // Store user in localStorage on successful sign-in
         localStorage.setItem('authUser', JSON.stringify(data.user));
         return true;
       }
@@ -59,9 +59,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const signup = async (userData) => {
+  const signup = async (userData: any): Promise<boolean> => {
     try {
-      const response = await fetch('https://ak889-auth-backend.hf.space/signup', {
+      const response = await fetch(`${BACKEND_URL}/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
@@ -75,20 +75,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signout = () => {
     setUser(null);
-    // Remove user from localStorage on sign-out
     localStorage.removeItem('authUser');
   };
 
-  const value = { user, signin, signup, signout };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, signin, signup, signout }}>{children}</AuthContext.Provider>;
 };
 
-// Create a custom hook for easy access to the context
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 };
