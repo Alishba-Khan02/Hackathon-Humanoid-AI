@@ -1,0 +1,142 @@
+.personalizedContentContainer {
+  padding: 2rem 0;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.personalizedContentContainer h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--ifm-color-primary);
+}
+
+.personalizedContentContainer p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.contentBlock {
+  background-color: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-border-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  box-shadow: var(--ifm-shadow-low);
+}
+
+.contentBlock h3 {
+  color: var(--ifm-color-primary-dark);
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.contentBlock ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.contentBlock li a {
+  color: var(--ifm-link-color);
+  text-decoration: none;
+}
+
+.contentBlock li a:hover {
+  text-decoration: underline;
+}
+
+.callToAction {
+  margin-top: 2rem;
+}
+
+.authContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - var(--ifm-navbar-height) - var(--ifm-footer-height));
+  padding: 2rem 0;
+}
+
+.authForm {
+  background-color: var(--ifm-background-color);
+  padding: 2rem;
+  border-radius: var(--ifm-border-radius);
+  box-shadow: var(--ifm-shadow-md);
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+}
+
+.authForm h2 {
+  color: var(--ifm-color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.authForm input[type="text"],
+.authForm input[type="email"],
+.authForm input[type="password"] {
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-border-radius);
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box; /* Include padding in width */
+}
+
+.authForm input[type="text"]:focus,
+.authForm input[type="email"]:focus,
+.authForm input[type="password"]:focus {
+  border-color: var(--ifm-color-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ifm-color-primary-light);
+}
+
+.authForm button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--ifm-border-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.authForm button:hover {
+  background-color: var(--ifm-color-primary-dark);
+}
+
+.authForm label {
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--ifm-font-color-secondary);
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem; /* Added for better spacing */
+}
+
+.authForm hr {
+  border: none;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  margin: 1.5rem 0;
+}
+
+.authForm .error {
+  color: var(--ifm-color-danger);
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}
+
+.authForm .success {
+  color: var(--ifm-color-success);
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1rem;
+}

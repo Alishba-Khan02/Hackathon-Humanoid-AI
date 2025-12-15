@@ -1,12 +1,11 @@
+// docusaurus.config.ts
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-
 const config: Config = {
   title: 'Physical AI & Humanoid Robotics Book',
-  tagline: 'Empowering the next generation of Physical AI and Humanoid Robotics developers.',
+  tagline: 'Explore the comprehensive course documentation for Physical AI and Humanoid Robotics, covering simulation, real-world deployment, and intelligent interaction.',
   favicon: 'img/logo.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -36,16 +35,11 @@ const config: Config = {
   },
 
   plugins: [
-    // Placeholder for a Docusaurus BibTeX plugin.
-    // A dedicated plugin (e.g., '@docusaurus/plugin-content-bibliography')
-    // needs to be developed or a community solution found to properly
-    // integrate BibTeX files and render citations.
-    // For now, this entry serves as a configuration intention.
+    // Existing Docusaurus BibTeX plugin placeholder
     // [
     //   '@docusaurus/plugin-content-bibliography',
     //   {
     //     path: 'references', // Path to the directory containing BibTeX files
-    //     // other options here
     //   },
     // ],
   ],
@@ -61,21 +55,7 @@ const config: Config = {
           editUrl:
             'https://github.com/your-github-organization/your-github-repo/tree/main/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/your-github-organization/your-github-repo/tree/main/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false, // Disable the blog
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -107,6 +87,16 @@ const config: Config = {
           label: 'GitHub',
           position: 'right',
         },
+        {
+          to: '/signin',
+          label: 'Sign In',
+          position: 'right',
+        },
+        {
+          to: '/signup',
+          label: 'Sign Up',
+          position: 'right',
+        },
       ],
     },
     // Adding search functionality via Algolia
@@ -123,7 +113,7 @@ const config: Config = {
       links: [
      
       ],
-      copyright: `Copyright © ${new Date().getFullYear()}  AI & Humanoid Robotics Book. Built with Alishba Khan`,
+      copyright: `Copyright © ${new Date().getFullYear()}  AI & Humanoid Robotics Book. Built by Alishba Khan`,
     },
     prism: {
       theme: prismThemes.github,
