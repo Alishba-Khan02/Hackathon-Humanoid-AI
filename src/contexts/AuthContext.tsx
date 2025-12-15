@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signin = async (email, password) => {
     try {
-      const response = await fetch('http://localhost:8000/signin', {
+      const response = await fetch('https://ak889-auth-backend.hf.space/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signup = async (userData) => {
     try {
-      const response = await fetch('http://localhost:8000/signup', {
+      const response = await fetch('https://ak889-auth-backend.hf.space/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
