@@ -1,7 +1,6 @@
 // src/contexts/AuthContext.tsx
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
-// Define the shape of the user object
 interface User {
   name: string;
   email: string;
@@ -14,7 +13,6 @@ interface User {
   };
 }
 
-// Define the shape of the context
 interface AuthContextType {
   user: User | null;
   signin: (email: string, password: string) => Promise<boolean>;
@@ -22,19 +20,25 @@ interface AuthContextType {
   signout: () => void;
 }
 
-// Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Update this to your deployed Hugging Face backend URL
-const BACKEND_URL = 'https://ak889-auth-backend.hf.space';
+// ✅ Change this depending on environment
+// For local testing:
+const LOCAL_BACKEND_URL = 'http://127.0.0.1:8000';
+// For deployed Hugging Face backend:
+const DEPLOY_BACKEND_URL = 'https://ak889-auth-backend.hf.space';
+
+// Automatically choose backend based on environment
+const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? LOCAL_BACKEND_URL
+  : DEPLOY_BACKEND_URL;
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
     try {
       const storedUser = localStorage.getItem('authUser');
       return storedUser ? JSON.parse(storedUser) : null;
-    } catch (error) {
-      console.error('Failed to parse user from localStorage', error);
+    } catch {
       return null;
     }
   });
