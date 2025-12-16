@@ -1,6 +1,7 @@
 // src/contexts/AuthContext.tsx
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 
+// Define the shape of the user object
 interface User {
   name: string;
   email: string;
@@ -13,6 +14,7 @@ interface User {
   };
 }
 
+// Define the shape of the context
 interface AuthContextType {
   user: User | null;
   signin: (email: string, password: string) => Promise<boolean>;
@@ -22,28 +24,21 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// ✅ Change this depending on environment
-// For local testing:
-const LOCAL_BACKEND_URL = 'http://127.0.0.1:8000';
-// For deployed Hugging Face backend:
-const DEPLOY_BACKEND_URL = 'https://ak889-auth-backend.hf.space';
-
-// Automatically choose backend based on environment
-const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? LOCAL_BACKEND_URL
-  : DEPLOY_BACKEND_URL;
+// Centralized backend URL
+const BACKEND_URL = 'https://ak889-complete-backend.hf.space';
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
     try {
       const storedUser = localStorage.getItem('authUser');
       return storedUser ? JSON.parse(storedUser) : null;
-    } catch {
+    } catch (error) {
+      console.error("Failed to parse user from localStorage", error);
       return null;
     }
   });
 
-  const signin = async (email: string, password: string): Promise<boolean> => {
+  const signin = async (email, password) => {
     try {
       const response = await fetch(`${BACKEND_URL}/signin`, {
         method: 'POST',
@@ -63,7 +58,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const signup = async (userData: any): Promise<boolean> => {
+  const signup = async (userData) => {
     try {
       const response = await fetch(`${BACKEND_URL}/signup`, {
         method: 'POST',
@@ -82,11 +77,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('authUser');
   };
 
-  return <AuthContext.Provider value={{ user, signin, signup, signout }}>{children}</AuthContext.Provider>;
+  const value = { user, signin, signup, signout };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within an AuthProvider');
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
   return context;
 };

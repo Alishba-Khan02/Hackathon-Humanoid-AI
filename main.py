@@ -1,35 +1,111 @@
+# main.py
 import os
-from dotenv import load_dotenv
-from fastapi import FastAPI
+import json
+import logging
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 from google import genai
 
-# Load environment variables
+# --- Initial Setup ---
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 load_dotenv()
+
+# --- Gemini API Key ---
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY not set in .env")
 
-# Configure Gemini client
+# --- Configure Gemini client ---
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 app = FastAPI()
 
-# CORS Middleware
+# --- CORS Middleware ---
+origins = ["http://localhost:3000"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Request model
+# --- Dummy Database for Better Auth ---
+DB_FILE = "dummy_users.json"
+
+def _load_db():
+    if os.path.exists(DB_FILE):
+        with open(DB_FILE, 'r') as f:
+            try:
+                return json.load(f)
+            except json.JSONDecodeError:
+                return {"auth": {}, "profiles": {}}
+    return {"auth": {}, "profiles": {}}
+
+def _save_db(data):
+    with open(DB_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
+
+# --- Better Auth Dummy Client ---
+class BetterAuthClient:
+    def signup(self, name: str, email: str, password: str, background: dict):
+        db = _load_db()
+        if email in db["auth"]:
+            raise ValueError(f"User with email '{email}' already exists.")
+        db["auth"][email] = {"password": password}
+        db["profiles"][email] = {
+            "name": name,
+            "email": email,
+            "software_background": background.get("software"),
+            "hardware_background": background.get("hardware"),
+            "structured_background": background.get("structured"),
+        }
+        _save_db(db)
+        return {"success": True, "user_id": email}
+
+    def signin(self, email: str, password: str):
+        db = _load_db()
+        user_auth_info = db["auth"].get(email)
+        if user_auth_info and user_auth_info["password"] == password:
+            user_profile = db["profiles"].get(email)
+            return {"success": True, "profile": user_profile}
+        return {"success": False, "error": "Invalid email or password"}
+
+better_auth_client = BetterAuthClient()
+
+# --- Pydantic Models for Auth ---
+class UserSignup(BaseModel):
+    name: str
+    email: str
+    password: str
+    background: dict
+
+class UserSignin(BaseModel):
+    email: str
+    password: str
+
+# --- Auth Endpoints ---
+@app.post("/signup")
+def signup_user(user_data: UserSignup):
+    return better_auth_client.signup(user_data.name, user_data.email, user_data.password, user_data.background)
+
+@app.post("/signin")
+def signin_user(user_data: UserSignin):
+    result = better_auth_client.signin(email=user_data.email, password=user_data.password)
+    if result["success"]:
+        return {"message": "Signin successful!", "user": result["profile"]}
+    raise HTTPException(status_code=401, detail="Invalid credentials")
+
+# --- Gemini-based Chatbot ---
+
+# Chat request model
 class ChatQuery(BaseModel):
     query: str
 
-# Example documents with long detailed descriptions
+# Example documents for book content
 documents = {
     1: (
         "Module 1: Robotic Nervous System explains how robots perceive, process, and act. "
@@ -75,21 +151,21 @@ documents = {
 greetings = ["hi", "hello", "hey", "good morning", "good afternoon"]
 
 def retrieve_context(query: str, top_k: int = 4):
-    # For now, return first top_k documents as context
     return [documents[i] for i in range(1, min(top_k + 1, len(documents) + 1))]
 
+# Chat endpoint
 @app.post("/chat")
 def chat(chat_query: ChatQuery):
     user_input = chat_query.query.strip().lower()
 
-    # 1. Check if the query is a greeting
+    # Greeting check
     if user_input in greetings:
         return {"response": "Hello! How can I help you with the Humanoid AI book today?"}
 
-    # 2. Retrieve context for RAG
+    # Retrieve context
     context = retrieve_context(chat_query.query)
 
-    # 3. Build prompt for Gemini
+    # Build Gemini prompt
     prompt = (
         "You are a helpful assistant for the 'Physical AI & Humanoid Robotics' book. "
         "Answer the user's question based on the provided context in a long, detailed, and comprehensive way. "
@@ -99,7 +175,6 @@ def chat(chat_query: ChatQuery):
     )
 
     try:
-        # Create chat session and send message
         chat_session = client.chats.create(model="gemini-2.5-flash")
         response = chat_session.send_message(prompt)
         return {"response": response.text}
